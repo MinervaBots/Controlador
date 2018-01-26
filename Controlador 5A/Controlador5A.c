@@ -230,7 +230,6 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
 void rotateMotor(){
     int duty_cycle1;
     int duty_cycle2;
-    int k = 1;
     unsigned int pulseWidth1;
     unsigned int pulseWidth2;
     pulseWidth1 = t2_sig1;   //lê o pulso do canal 1
@@ -239,45 +238,6 @@ void rotateMotor(){
     //Mapear 1100us a 1900ms em -100% a 100% de rotacao
     pulseWidth1 = map(pulseWidth1,MIN_CH_DURATION,MAX_CH_DURATION,MIN_PWM,MAX_PWM);
     pulseWidth2 = map(pulseWidth2,MIN_CH_DURATION,MAX_CH_DURATION,MIN_PWM,MAX_PWM);
-    
-    //mixagem dos canais
-    duty_cycle1 = k*(pulseWidth2 + pulseWidth1);
-    duty_cycle2 = k*(pulseWidth2 - pulseWidth1);
-    
-    if((duty_cycle1 > 255) || (duty_cycle2 > 255))
-    {
-       if(duty_cycle1 > duty_cycle2)
-       {
-          k = duty_cycle1/255;
-       }
-       
-       else
-       {
-          k = duty_cycle2/255;
-       }
-       
-       duty_cycle1 = k*(pulseWidth2 + pulseWidth1);
-       duty_cycle2 = k*(pulseWidth2 - pulseWidth1);
-    }
-    
-    if((duty_cycle1 < -255) || (duty_cycle2 < -255))
-    {
-       if(duty_cycle1 < duty_cycle2)
-       {
-          k = -duty_cycle1/255;
-       }
-
-       else
-       {
-          k = -duty_cycle2/255;
-       }
-
-       duty_cycle1 = k*(pulseWidth2 + pulseWidth1);
-       duty_cycle2 = k*(pulseWidth2 - pulseWidth1);
-    }
-    
-    duty_cycle1 = map(duty_cycle1,MIN_PWM,MAX_PWM,MIN_PWM,MAX_PWM);
-    duty_cycle2 = map(duty_cycle2,MIN_PWM,MAX_PWM,MIN_PWM,MAX_PWM);
     
     // Tratamento de erro, para nao exceder os valores maximos;
     if(duty_cycle1 < MIN_PWM)

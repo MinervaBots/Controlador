@@ -13,9 +13,6 @@ main
 			Div_32x32_S
 				SDIV3232L
 				COMFREM
-		Mul_16X16_U
-		Div_16x16_S
-			Div_16x16_S_L
 		pwm_steering
 		set_duty_cycle
 interrupt
