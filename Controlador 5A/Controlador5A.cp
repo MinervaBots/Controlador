@@ -1,5 +1,5 @@
-#line 1 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
-#line 34 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
+#line 1 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
+#line 35 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
  unsigned long t1_sig1;
  unsigned long t2_sig1;
  unsigned long t1_sig2;
@@ -9,9 +9,6 @@
  unsigned int n_interrupts_timer1 = 0;
  unsigned short lower_8bits;
  unsigned short upper_8bits;
-
-
-
 
 void setup_pwms(){
  T2CON = 0;
@@ -29,7 +26,7 @@ void setup_pwms(){
  PSTR1CON.B4 = 1;
  CCPR1L = 0b11111111;
  CCP1CON = 0b00111100;
-#line 76 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
+#line 74 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
  CCPTMRS.B3 = 0;
  CCPTMRS.B2 = 0;
 
@@ -153,33 +150,10 @@ void setup_port(){
 }
 
 unsigned failSafeCheck(){
- if((micros() - last_measure1) >  5000000  || (micros() - last_measure2) >  5000000 )
- return 1;
- return 0;
+
+ return ((micros() - last_measure1) >  2000000  || (micros() - last_measure2) >  2000000 );
 }
-
-unsigned long long PulseIn1(){
- unsigned long long flag;
- flag = micros();
- while( RA2_bit ){
- if((micros() - flag) >  5000000 )
- return 0;
- }
- while( RA2_bit  == 0){
- if((micros() - flag) >  5000000 )
- return 0;
- }
- t1_sig1 = micros();
- while( RA2_bit ){
- if((micros() - flag) >  5000000 )
- return 0;
- }
- t1_sig1 = micros() - t1_sig1;
-
- return t1_sig1;
-}
-
-
+#line 223 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
  return ((x - in_min) * (out_max - out_min) / (in_max - in_min)) + out_min;
@@ -187,14 +161,14 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
 void rotateMotor(){
  int duty_cycle1;
  int duty_cycle2;
- unsigned int pulseWidth1;
- unsigned int pulseWidth2;
+ unsigned long pulseWidth1;
+ unsigned long pulseWidth2;
  pulseWidth1 = t2_sig1;
  pulseWidth2 = t2_sig2;
 
 
- pulseWidth1 = map(pulseWidth1, 1100 , 1900 , -255 , 255 );
- pulseWidth2 = map(pulseWidth2, 1100 , 1900 , -255 , 255 );
+ duty_cycle1 = map(pulseWidth1, 1100 , 1900 , -255 , 255 );
+ duty_cycle2 = map(pulseWidth2, 1100 , 1900 , -255 , 255 );
 
 
  if(duty_cycle1 <  -255 )
@@ -208,20 +182,19 @@ void rotateMotor(){
  duty_cycle2 =  255 ;
 
 
- if((duty_cycle1 < ( 0  +  10 )) && (duty_cycle1 > ( 0  -  10 )))
- duty_cycle1 =  0 ;
+ if((duty_cycle1 < ( ( 255 + -255 )/2  +  10 )) && (duty_cycle1 > ( ( 255 + -255 )/2  -  10 )))
+ duty_cycle1 =  ( 255 + -255 )/2 ;
 
- if((duty_cycle2 < ( 0  +  10 )) && (duty_cycle2 > ( 0  -  10 )))
- duty_cycle2 =  0 ;
+ if((duty_cycle2 < ( ( 255 + -255 )/2  +  10 )) && (duty_cycle2 > ( ( 255 + -255 )/2  -  10 )))
+ duty_cycle2 =  ( 255 + -255 )/2 ;
 
  if(duty_cycle1 >= 0){
  pwm_steering(1,2);
  set_duty_cycle(1,duty_cycle1);
  }
  else{
- duty_cycle1 = -duty_cycle1;
  pwm_steering(1,1);
- set_duty_cycle(1,duty_cycle1);
+ set_duty_cycle(1,-duty_cycle1);
  }
 
  if(duty_cycle2 >= 0){
@@ -229,9 +202,8 @@ void rotateMotor(){
  set_duty_cycle(2,duty_cycle2);
  }
  else{
- duty_cycle2 = -duty_cycle2;
  pwm_steering(2,1);
- set_duty_cycle(2,duty_cycle2);
+ set_duty_cycle(2,-duty_cycle2);
  }
 }
 
@@ -366,7 +338,7 @@ void calibration(){
  error_led_blink(1600);
   RA0_bit  = 0;
 }
-#line 448 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
+#line 443 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
 void print_signal_received(){
  char buffer[11];
 
@@ -393,9 +365,8 @@ void main() {
  setup_port();
  setup_pwms();
  setup_Timer_1();
-#line 479 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
+#line 474 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
  while(1){
-
   RA0_bit  = 0;
  while(failSafeCheck()) {
   RA0_bit  = 1;

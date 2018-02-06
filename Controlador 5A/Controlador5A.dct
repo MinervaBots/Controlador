@@ -1096,7 +1096,6 @@ pss2bd1
 pss2bd1_bit
 pstr1con
 pstr2con
-pulsein1
 pwm_steering
 pwm1_init
 pwm1_set_duty

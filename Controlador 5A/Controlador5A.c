@@ -3,7 +3,8 @@
  #define SIGNAL_PERIOD        20000   //20ms
  #define SIGNAL_PERIOD_OFFSET 1000/SIGNAL_PERIOD; // 1ms/20ms
  #define UART_CONST           15.6
- #define FAIL_SAFE_TIME       5000000//250*SIGNAL_PERIOD
+ #define FAIL_SAFE_TIME       2000000//100*SIGNAL_PERIOD
+ 
  //#define ALPHA                0.1
  
  #define RADIO_IN1          RA2_bit
@@ -19,7 +20,7 @@
  #define MAX_CH_DURATION   1900
  #define MAX_PWM           255
  #define MIN_PWM           -255
- #define CENTER_PWM        0
+ #define CENTER_PWM        (MAX_PWM+MIN_PWM)/2
  #define DEADZONE          10
  
  // PWMS
@@ -40,9 +41,6 @@
   unsigned int n_interrupts_timer1 = 0;//variavel que armazena o numero de estouros do timer1
   unsigned short  lower_8bits;     //variaveis utilizadas para armazenamento de uma variavel 16bits
   unsigned short  upper_8bits;     //em dois enderecos de memoria 8 bits
-
-  //float fpulse1 = 0;                  //variavel utilizada para filtrar o pulso recebido
-  //float fpulse2 = 0;
 
 void setup_pwms(){
    T2CON = 0;   //desliga o Timer2, timer responsavel pelos PWMS
@@ -196,12 +194,11 @@ void setup_port(){
 }
 
 unsigned failSafeCheck(){ //confere se ainda esta recebendo sinal
-  if((micros() - last_measure1) > FAIL_SAFE_TIME || (micros() - last_measure2) > FAIL_SAFE_TIME)//compara o tempo do ultimo sinal recebido
-    return 1;
-  return 0;
+  //compara o tempo do ultimo sinal recebido
+  return ((micros() - last_measure1) > FAIL_SAFE_TIME || (micros() - last_measure2) > FAIL_SAFE_TIME);
 }
 
-unsigned long long PulseIn1(){  //funcao que calculava, via software, o pulso recebido
+/*unsigned long long PulseIn1(){  //funcao que calculava, via software, o pulso recebido
  unsigned long long flag;
  flag = micros();
  while(RADIO_IN1){   //garante que nao pegamos o sinal na metade, espera o sinal acabar para medi-lo de novo
@@ -220,7 +217,7 @@ unsigned long long PulseIn1(){  //funcao que calculava, via software, o pulso re
  t1_sig1 = micros() - t1_sig1;//faz a diferenca entre as duas medidas de tempo
 
  return t1_sig1;
-}
+}               */
 
 // funcao para mapear o sinal recebido para pwm
 long map(long x, long in_min, long in_max, long out_min, long out_max)
@@ -230,14 +227,14 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
 void rotateMotor(){
     int duty_cycle1;
     int duty_cycle2;
-    unsigned int pulseWidth1;
-    unsigned int pulseWidth2;
+    unsigned long pulseWidth1;
+    unsigned long pulseWidth2;
     pulseWidth1 = t2_sig1;   //lê o pulso do canal 1
     pulseWidth2 = t2_sig2;   //lê o pulso do canal 2
 
     //Mapear 1100us a 1900ms em -100% a 100% de rotacao
-    pulseWidth1 = map(pulseWidth1,MIN_CH_DURATION,MAX_CH_DURATION,MIN_PWM,MAX_PWM);
-    pulseWidth2 = map(pulseWidth2,MIN_CH_DURATION,MAX_CH_DURATION,MIN_PWM,MAX_PWM);
+    duty_cycle1 = map(pulseWidth1,MIN_CH_DURATION,MAX_CH_DURATION,MIN_PWM,MAX_PWM);
+    duty_cycle2 = map(pulseWidth2,MIN_CH_DURATION,MAX_CH_DURATION,MIN_PWM,MAX_PWM);
     
     // Tratamento de erro, para nao exceder os valores maximos;
     if(duty_cycle1 < MIN_PWM)
@@ -262,9 +259,8 @@ void rotateMotor(){
       set_duty_cycle(1,duty_cycle1);                     //aplica o duty cycle
     }
     else{
-      duty_cycle1 = -duty_cycle1;
       pwm_steering(1,1);                       //coloca no sentido horario de rotacao
-      set_duty_cycle(1,duty_cycle1);           //aplica o duty cycle
+      set_duty_cycle(1,-duty_cycle1);           //aplica o duty cycle
     }
 
     if(duty_cycle2 >= 0){
@@ -272,9 +268,8 @@ void rotateMotor(){
       set_duty_cycle(2,duty_cycle2);                      //aplica o duty cycle
     }
     else{
-      duty_cycle2 = -duty_cycle2;
       pwm_steering(2,1);                       //coloca no sentido horario de rotacao
-      set_duty_cycle(2,duty_cycle2);            //aplica o duty cycle
+      set_duty_cycle(2,-duty_cycle2);            //aplica o duty cycle
     }
 }
 
@@ -477,7 +472,6 @@ void main() {
    set_duty_cycle(2, 255);  */
    //calibration();
    while(1){
-
     ERROR_LED = 0;
     while(failSafeCheck()) {
        ERROR_LED = 1;
@@ -485,6 +479,6 @@ void main() {
        set_duty_cycle(2, 0);
     }
     rotateMotor();
-    delay_ms(200);
+    delay_ms(200);    //atraso como uma solução paleativa para os espasmos
     }
 }
