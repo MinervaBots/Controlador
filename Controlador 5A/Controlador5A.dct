@@ -352,6 +352,7 @@ c4tsel0
 c4tsel0_bit
 c4tsel1
 c4tsel1_bit
+calib_led_blink
 calibration
 canspigetoperationmode
 canspiinitialize
@@ -876,6 +877,8 @@ manchester_1
 manchester_out
 map
 max
+max_ch1_duration
+max_ch2_duration
 mc1out
 mc1out_bit
 mc2out
@@ -943,6 +946,8 @@ mfiofr
 mfiofr_bit
 micros
 min
+min_ch1_duration
+min_ch2_duration
 mm_error_
 mm_freememtable
 mm_init
@@ -1170,6 +1175,7 @@ rcreg
 rcsta
 rd
 rd_bit
+read_eeprom_signals_data
 res032
 rotatemotor
 rs485master_init

@@ -4,6 +4,13 @@ main
 		ADC_Init
 	setup_pwms
 	setup_Timer_1
+	calibration
+		micros
+		EEPROM_Write
+		calib_led_blink
+			Div_16X16_U
+		read_eeprom_signals_data
+			EEPROM_Read
 	failSafeCheck
 		micros
 	set_duty_cycle

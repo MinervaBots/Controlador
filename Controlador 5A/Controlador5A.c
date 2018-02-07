@@ -16,8 +16,6 @@
  #define ERROR_FLAG_A       RC3_bit
  #define ERROR_FLAG_B       RC2_bit
 
- #define MIN_CH_DURATION   1100
- #define MAX_CH_DURATION   1900
  #define MAX_PWM           255
  #define MIN_PWM           -255
  #define CENTER_PWM        (MAX_PWM+MIN_PWM)/2
@@ -41,6 +39,10 @@
   unsigned int n_interrupts_timer1 = 0;//variavel que armazena o numero de estouros do timer1
   unsigned short  lower_8bits;     //variaveis utilizadas para armazenamento de uma variavel 16bits
   unsigned short  upper_8bits;     //em dois enderecos de memoria 8 bits
+  unsigned int MIN_CH1_DURATION = 1100;
+  unsigned int MAX_CH1_DURATION = 1900;
+  unsigned int MIN_CH2_DURATION = 1100;
+  unsigned int MAX_CH2_DURATION = 1900;
 
 void setup_pwms(){
    T2CON = 0;   //desliga o Timer2, timer responsavel pelos PWMS
@@ -233,8 +235,8 @@ void rotateMotor(){
     pulseWidth2 = t2_sig2;   //lê o pulso do canal 2
 
     //Mapear 1100us a 1900ms em -100% a 100% de rotacao
-    duty_cycle1 = map(pulseWidth1,MIN_CH_DURATION,MAX_CH_DURATION,MIN_PWM,MAX_PWM);
-    duty_cycle2 = map(pulseWidth2,MIN_CH_DURATION,MAX_CH_DURATION,MIN_PWM,MAX_PWM);
+    duty_cycle1 = map(pulseWidth1,MIN_CH1_DURATION,MAX_CH1_DURATION,MIN_PWM,MAX_PWM);
+    duty_cycle2 = map(pulseWidth2,MIN_CH2_DURATION,MAX_CH2_DURATION,MIN_PWM,MAX_PWM);
     
     // Tratamento de erro, para nao exceder os valores maximos;
     if(duty_cycle1 < MIN_PWM)
@@ -332,6 +334,53 @@ void error_led_blink(unsigned time_ms){
        delay_ms(200);
    }
 }
+
+void calib_led_blink(unsigned time_ms){
+   int i;
+   time_ms = time_ms/250; //4 blinks por segundo
+   for(i=0; i< time_ms; i++){
+       CALIB_LED = 1;
+       delay_ms(200);
+       CALIB_LED = 0;
+       delay_ms(200);
+   }
+}
+
+void read_eeprom_signals_data(){
+   //char buffer[11];
+   //unsigned int signal_value;
+
+   //UART1_write_text("LOW channel1: ");
+   lower_8bits = EEPROM_Read(0X00);
+   upper_8bits = EEPROM_Read(0X01);
+   MIN_CH1_DURATION = (upper_8bits << 8) | lower_8bits;
+   //WordToStr(signal_value, buffer);
+   //UART1_write_text(buffer);
+   //UART1_write_text(" channel2: ");
+   lower_8bits = EEPROM_Read(0X02);
+   upper_8bits = EEPROM_Read(0X03);
+   MIN_CH2_DURATION = (upper_8bits << 8) | lower_8bits;
+   //WordToStr(signal_value, buffer);
+   //UART1_write_text(buffer);
+   //UART1_write_text("\t");
+   //delay_ms(10);
+
+   //UART1_write_text("HIGH channel1: ");
+   lower_8bits = EEPROM_Read(0X04);
+   upper_8bits = EEPROM_Read(0X05);
+   MAX_CH1_DURATION = (upper_8bits << 8) | lower_8bits;
+   //WordToStr(signal_value, buffer);
+   //UART1_write_text(buffer);
+   //UART1_write_text(" channel2: ");
+   lower_8bits = EEPROM_Read(0X06);
+   upper_8bits = EEPROM_Read(0X07);
+   MAX_CH2_DURATION = (upper_8bits << 8) | lower_8bits;
+   //WordToStr(signal_value, buffer);
+   //UART1_write_text(buffer);
+   //UART1_write_text("\n");
+   //delay_ms(10);
+}
+
 void calibration(){
    unsigned int signal1_H_value;
    unsigned int signal2_H_value;
@@ -345,7 +394,7 @@ void calibration(){
    signal1_H_value = 0;                        //Tempo minimo
    signal2_H_value = 0;                        //Tempo minimo
    time_control = micros();                    //controla o tempo de captura
-   ERROR_LED = 1;                              //indica a captura do pulso
+   CALIB_LED = 1;                              //indica a captura do pulso
    
    while((micros() - time_control) < 2000000){
         signal_T_value = (unsigned) t2_sig1;   //valor da largura do pulso do canal1
@@ -374,9 +423,9 @@ void calibration(){
    EEPROM_Write(0X03,upper_8bits);
    delay_ms(10);
 
-   error_led_blink(1600);                      //indica a captura do valor minimo
+   calib_led_blink(1600);                      //indica a captura do valor minimo
    time_control = micros();                    //controla o tempo de captura
-   ERROR_LED = 1;                              //indica a captura do pulso
+   CALIB_LED = 1;                              //indica a captura do pulso
    while((micros() - time_control) < 2000000){
         signal_T_value = (unsigned) t2_sig1;   //valor da largura do pulso do canal1
         if(signal_T_value > signal1_H_value)
@@ -401,44 +450,11 @@ void calibration(){
    EEPROM_Write(0X07,upper_8bits);
    delay_ms(10);
    
-   error_led_blink(1600);                      //indica a captura do valor maximo
-   ERROR_LED = 0;
+   calib_led_blink(1600);                      //indica a captura do valor maximo
+   CALIB_LED = 0;
+   
+   read_eeprom_signals_data();
 }
-
-/*void read_eeprom_signals_data(){
-   char buffer[11];
-   unsigned int signal_value;
-   
-   UART1_write_text("LOW channel1: ");
-   lower_8bits = EEPROM_Read(0X00);
-   upper_8bits = EEPROM_Read(0X01);
-   signal_value = (upper_8bits << 8) | lower_8bits;
-   WordToStr(signal_value, buffer);
-   UART1_write_text(buffer);
-   UART1_write_text(" channel2: ");
-   lower_8bits = EEPROM_Read(0X02);
-   upper_8bits = EEPROM_Read(0X03);
-   signal_value = (upper_8bits << 8) | lower_8bits;
-   WordToStr(signal_value, buffer);
-   UART1_write_text(buffer);
-   UART1_write_text("\t");
-   delay_ms(10);
-   
-   UART1_write_text("HIGH channel1: ");
-   lower_8bits = EEPROM_Read(0X04);
-   upper_8bits = EEPROM_Read(0X05);
-   signal_value = (upper_8bits << 8) | lower_8bits;
-   WordToStr(signal_value, buffer);
-   UART1_write_text(buffer);
-   UART1_write_text(" channel2: ");
-   lower_8bits = EEPROM_Read(0X06);
-   upper_8bits = EEPROM_Read(0X07);
-   signal_value = (upper_8bits << 8) | lower_8bits;
-   WordToStr(signal_value, buffer);
-   UART1_write_text(buffer);
-   UART1_write_text("\n");
-   delay_ms(10);
-}      */
 
 void print_signal_received(){
     char buffer[11];
@@ -457,8 +473,7 @@ void print_signal_received(){
 }
 
 unsigned errorFlags() {
-     if(ERROR_FLAG_A==0 || ERROR_FLAG_B==0) { return 1;}
-     return 0;
+     return (ERROR_FLAG_A==0 || ERROR_FLAG_B==0);
 }
 
 void main() {
@@ -466,11 +481,8 @@ void main() {
    setup_port();
    setup_pwms();
    setup_Timer_1();
-   /*pwm_steering(1,2);
-   pwm_steering(2,2);
-   set_duty_cycle(1, 0);
-   set_duty_cycle(2, 255);  */
-   //calibration();
+   delay_ms(300);
+   if(CALIB_BUTTON==0) {calibration();}
    while(1){
     ERROR_LED = 0;
     while(failSafeCheck()) {
