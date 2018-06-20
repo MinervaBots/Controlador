@@ -1,5 +1,5 @@
-#line 1 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
-#line 33 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
+#line 1 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
+#line 33 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
  unsigned long t1_sig1;
  unsigned long t2_sig1;
  unsigned long t1_sig2;
@@ -30,7 +30,7 @@ void setup_pwms(){
  PSTR1CON.B4 = 1;
  CCPR1L = 0b11111111;
  CCP1CON = 0b00111100;
-#line 76 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
+#line 76 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
  CCPTMRS.B3 = 0;
  CCPTMRS.B2 = 0;
 
@@ -157,7 +157,7 @@ unsigned failSafeCheck(){
 
  return ((micros() - last_measure1) >  2000000  || (micros() - last_measure2) >  2000000 );
 }
-#line 225 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/Controlador 5A/Projeto de software/Controlador5A/Controlador5A.c"
+#line 225 "C:/Users/Samsung/Desktop/MinervaBots/Projetos/Controlador/Controlador 2017.2/_Controlador Git/Controlador/Controlador 5A/Controlador5A.c"
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
  return ((x - in_min) * (out_max - out_min) / (in_max - in_min)) + out_min;
@@ -186,10 +186,10 @@ void rotateMotor(){
  duty_cycle2 =  255 ;
 
 
- if((duty_cycle1 < ( ( 255 + -255 )/2  +  10 )) && (duty_cycle1 > ( ( 255 + -255 )/2  -  10 )))
+ if((duty_cycle1 < ( ( 255 + -255 )/2  +  50 )) && (duty_cycle1 > ( ( 255 + -255 )/2  -  50 )))
  duty_cycle1 =  ( 255 + -255 )/2 ;
 
- if((duty_cycle2 < ( ( 255 + -255 )/2  +  10 )) && (duty_cycle2 > ( ( 255 + -255 )/2  -  10 )))
+ if((duty_cycle2 < ( ( 255 + -255 )/2  +  50 )) && (duty_cycle2 > ( ( 255 + -255 )/2  -  50 )))
  duty_cycle2 =  ( 255 + -255 )/2 ;
 
  if(duty_cycle1 >= 0){
@@ -223,40 +223,56 @@ void interrupt()
  n_interrupts_timer1++;
  }
 
- if(CCP3IF_bit && CCP3CON.B0)
+ if(CCP3IF_bit && CCP3M0_bit)
  {
- CCP3IF_bit = 0x00;
  CCP3IE_bit = 0x00;
+ CCP4IE_bit = 0x00;
+ TMR1ON_bit = 0x00;
  CCP3CON = 0x04;
  t1_sig1 = micros();
+ CCP3IF_bit = 0x00;
+ TMR1ON_bit = 0x01;
  CCP3IE_bit = 0x01;
+ CCP4IE_bit = 0x01;
  }
  else if(CCP3IF_bit)
  {
- CCP3IF_bit = 0x00;
  CCP3IE_bit = 0x00;
+ CCP4IE_bit = 0x00;
+ TMR1ON_bit = 0x00;
  CCP3CON = 0x05;
  t2_sig1 = micros() - t1_sig1;
- CCP3IE_bit = 0x01;
  last_measure1 = micros();
+ TMR1ON_bit = 0x01;
+ CCP3IF_bit = 0x00;
+ CCP3IE_bit = 0x01;
+ CCP4IE_bit = 0x01;
  }
 
- if(CCP4IF_bit && CCP4CON.B0)
+ if(CCP4IF_bit && CCP4M0_bit)
  {
- CCP4IF_bit = 0x00;
+ CCP3IE_bit = 0x00;
  CCP4IE_bit = 0x00;
+ TMR1ON_bit = 0x00;
  CCP4CON = 0x04;
  t1_sig2 = micros();
+ CCP4IF_bit = 0x00;
+ TMR1ON_bit = 0x01;
+ CCP3IE_bit = 0x01;
  CCP4IE_bit = 0x01;
  }
  else if(CCP4IF_bit)
  {
- CCP4IF_bit = 0x00;
+ CCP3IE_bit = 0x00;
  CCP4IE_bit = 0x00;
+ TMR1ON_bit = 0x00;
  CCP4CON = 0x05;
  t2_sig2 = micros() - t1_sig2;
- CCP4IE_bit = 0x01;
  last_measure2 = micros();
+ TMR1ON_bit = 0x01;
+ CCP4IF_bit = 0x00;
+ CCP3IE_bit = 0x01;
+ CCP4IE_bit = 0x01;
  }
 }
 
@@ -426,7 +442,7 @@ void main() {
  set_duty_cycle(1, 0);
  set_duty_cycle(2, 0);
  }
+
  rotateMotor();
- delay_ms(200);
  }
 }

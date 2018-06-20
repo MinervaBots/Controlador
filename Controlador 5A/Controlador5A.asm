@@ -37,10 +37,10 @@ _set_duty_cycle:
 	MOVLW      0
 	XORWF      FARG_set_duty_cycle_channel+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__set_duty_cycle78
+	GOTO       L__set_duty_cycle77
 	MOVLW      1
 	XORWF      FARG_set_duty_cycle_channel+0, 0
-L__set_duty_cycle78:
+L__set_duty_cycle77:
 	BTFSS      STATUS+0, 2
 	GOTO       L_set_duty_cycle0
 	MOVF       FARG_set_duty_cycle_duty+0, 0
@@ -49,10 +49,10 @@ L_set_duty_cycle0:
 	MOVLW      0
 	XORWF      FARG_set_duty_cycle_channel+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__set_duty_cycle79
+	GOTO       L__set_duty_cycle78
 	MOVLW      2
 	XORWF      FARG_set_duty_cycle_channel+0, 0
-L__set_duty_cycle79:
+L__set_duty_cycle78:
 	BTFSS      STATUS+0, 2
 	GOTO       L_set_duty_cycle1
 	MOVF       FARG_set_duty_cycle_duty+0, 0
@@ -67,10 +67,10 @@ _pwm_steering:
 	MOVLW      0
 	XORWF      FARG_pwm_steering_channel+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__pwm_steering81
+	GOTO       L__pwm_steering80
 	MOVLW      1
 	XORWF      FARG_pwm_steering_channel+0, 0
-L__pwm_steering81:
+L__pwm_steering80:
 	BTFSS      STATUS+0, 2
 	GOTO       L_pwm_steering2
 	BCF        PSTR1CON+0, 0
@@ -78,10 +78,10 @@ L__pwm_steering81:
 	MOVLW      0
 	XORWF      FARG_pwm_steering_port+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__pwm_steering82
+	GOTO       L__pwm_steering81
 	MOVLW      1
 	XORWF      FARG_pwm_steering_port+0, 0
-L__pwm_steering82:
+L__pwm_steering81:
 	BTFSS      STATUS+0, 2
 	GOTO       L_pwm_steering3
 	BCF        RC4_bit+0, BitPos(RC4_bit+0)
@@ -90,10 +90,10 @@ L_pwm_steering3:
 	MOVLW      0
 	XORWF      FARG_pwm_steering_port+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__pwm_steering83
+	GOTO       L__pwm_steering82
 	MOVLW      2
 	XORWF      FARG_pwm_steering_port+0, 0
-L__pwm_steering83:
+L__pwm_steering82:
 	BTFSS      STATUS+0, 2
 	GOTO       L_pwm_steering4
 	BCF        RC5_bit+0, BitPos(RC5_bit+0)
@@ -103,10 +103,10 @@ L_pwm_steering2:
 	MOVLW      0
 	XORWF      FARG_pwm_steering_channel+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__pwm_steering84
+	GOTO       L__pwm_steering83
 	MOVLW      2
 	XORWF      FARG_pwm_steering_channel+0, 0
-L__pwm_steering84:
+L__pwm_steering83:
 	BTFSS      STATUS+0, 2
 	GOTO       L_pwm_steering5
 	BCF        PSTR2CON+0, 0
@@ -114,10 +114,10 @@ L__pwm_steering84:
 	MOVLW      0
 	XORWF      FARG_pwm_steering_port+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__pwm_steering85
+	GOTO       L__pwm_steering84
 	MOVLW      1
 	XORWF      FARG_pwm_steering_port+0, 0
-L__pwm_steering85:
+L__pwm_steering84:
 	BTFSS      STATUS+0, 2
 	GOTO       L_pwm_steering6
 	BCF        RA4_bit+0, BitPos(RA4_bit+0)
@@ -126,10 +126,10 @@ L_pwm_steering6:
 	MOVLW      0
 	XORWF      FARG_pwm_steering_port+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__pwm_steering86
+	GOTO       L__pwm_steering85
 	MOVLW      2
 	XORWF      FARG_pwm_steering_port+0, 0
-L__pwm_steering86:
+L__pwm_steering85:
 	BTFSS      STATUS+0, 2
 	GOTO       L_pwm_steering7
 	BCF        RA5_bit+0, BitPos(RA5_bit+0)
@@ -267,18 +267,18 @@ _failSafeCheck:
 	MOVF       R7, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__failSafeCheck92
+	GOTO       L__failSafeCheck91
 	MOVF       R6, 0
 	SUBLW      30
 	BTFSS      STATUS+0, 2
-	GOTO       L__failSafeCheck92
+	GOTO       L__failSafeCheck91
 	MOVF       R5, 0
 	SUBLW      132
 	BTFSS      STATUS+0, 2
-	GOTO       L__failSafeCheck92
+	GOTO       L__failSafeCheck91
 	MOVF       R4, 0
 	SUBLW      128
-L__failSafeCheck92:
+L__failSafeCheck91:
 	BTFSS      STATUS+0, 0
 	GOTO       L_failSafeCheck10
 	CALL       _micros+0
@@ -301,18 +301,18 @@ L__failSafeCheck92:
 	MOVF       R7, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__failSafeCheck93
+	GOTO       L__failSafeCheck92
 	MOVF       R6, 0
 	SUBLW      30
 	BTFSS      STATUS+0, 2
-	GOTO       L__failSafeCheck93
+	GOTO       L__failSafeCheck92
 	MOVF       R5, 0
 	SUBLW      132
 	BTFSS      STATUS+0, 2
-	GOTO       L__failSafeCheck93
+	GOTO       L__failSafeCheck92
 	MOVF       R4, 0
 	SUBLW      128
-L__failSafeCheck93:
+L__failSafeCheck92:
 	BTFSS      STATUS+0, 0
 	GOTO       L_failSafeCheck10
 	CLRF       R0
@@ -482,10 +482,10 @@ _rotateMotor:
 	XORLW      255
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor96
+	GOTO       L__rotateMotor95
 	MOVLW      1
 	SUBWF      rotateMotor_duty_cycle1_L0+0, 0
-L__rotateMotor96:
+L__rotateMotor95:
 	BTFSC      STATUS+0, 0
 	GOTO       L_rotateMotor11
 	MOVLW      1
@@ -499,10 +499,10 @@ L_rotateMotor11:
 	XORWF      rotateMotor_duty_cycle1_L0+1, 0
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor97
+	GOTO       L__rotateMotor96
 	MOVF       rotateMotor_duty_cycle1_L0+0, 0
 	SUBLW      255
-L__rotateMotor97:
+L__rotateMotor96:
 	BTFSC      STATUS+0, 0
 	GOTO       L_rotateMotor12
 	MOVLW      255
@@ -516,10 +516,10 @@ L_rotateMotor12:
 	XORLW      255
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor98
+	GOTO       L__rotateMotor97
 	MOVLW      1
 	SUBWF      rotateMotor_duty_cycle2_L0+0, 0
-L__rotateMotor98:
+L__rotateMotor97:
 	BTFSC      STATUS+0, 0
 	GOTO       L_rotateMotor13
 	MOVLW      1
@@ -533,10 +533,10 @@ L_rotateMotor13:
 	XORWF      rotateMotor_duty_cycle2_L0+1, 0
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor99
+	GOTO       L__rotateMotor98
 	MOVF       rotateMotor_duty_cycle2_L0+0, 0
 	SUBLW      255
-L__rotateMotor99:
+L__rotateMotor98:
 	BTFSC      STATUS+0, 0
 	GOTO       L_rotateMotor14
 	MOVLW      255
@@ -549,10 +549,10 @@ L_rotateMotor14:
 	MOVLW      128
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor100
-	MOVLW      10
+	GOTO       L__rotateMotor99
+	MOVLW      50
 	SUBWF      rotateMotor_duty_cycle1_L0+0, 0
-L__rotateMotor100:
+L__rotateMotor99:
 	BTFSC      STATUS+0, 0
 	GOTO       L_rotateMotor17
 	MOVLW      127
@@ -561,13 +561,13 @@ L__rotateMotor100:
 	XORWF      rotateMotor_duty_cycle1_L0+1, 0
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor101
+	GOTO       L__rotateMotor100
 	MOVF       rotateMotor_duty_cycle1_L0+0, 0
-	SUBLW      246
-L__rotateMotor101:
+	SUBLW      206
+L__rotateMotor100:
 	BTFSC      STATUS+0, 0
 	GOTO       L_rotateMotor17
-L__rotateMotor73:
+L__rotateMotor72:
 	CLRF       rotateMotor_duty_cycle1_L0+0
 	CLRF       rotateMotor_duty_cycle1_L0+1
 L_rotateMotor17:
@@ -577,10 +577,10 @@ L_rotateMotor17:
 	MOVLW      128
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor102
-	MOVLW      10
+	GOTO       L__rotateMotor101
+	MOVLW      50
 	SUBWF      rotateMotor_duty_cycle2_L0+0, 0
-L__rotateMotor102:
+L__rotateMotor101:
 	BTFSC      STATUS+0, 0
 	GOTO       L_rotateMotor20
 	MOVLW      127
@@ -589,13 +589,13 @@ L__rotateMotor102:
 	XORWF      rotateMotor_duty_cycle2_L0+1, 0
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor103
+	GOTO       L__rotateMotor102
 	MOVF       rotateMotor_duty_cycle2_L0+0, 0
-	SUBLW      246
-L__rotateMotor103:
+	SUBLW      206
+L__rotateMotor102:
 	BTFSC      STATUS+0, 0
 	GOTO       L_rotateMotor20
-L__rotateMotor72:
+L__rotateMotor71:
 	CLRF       rotateMotor_duty_cycle2_L0+0
 	CLRF       rotateMotor_duty_cycle2_L0+1
 L_rotateMotor20:
@@ -605,10 +605,10 @@ L_rotateMotor20:
 	MOVLW      128
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor104
+	GOTO       L__rotateMotor103
 	MOVLW      0
 	SUBWF      rotateMotor_duty_cycle1_L0+0, 0
-L__rotateMotor104:
+L__rotateMotor103:
 	BTFSS      STATUS+0, 0
 	GOTO       L_rotateMotor21
 	MOVLW      1
@@ -660,10 +660,10 @@ L_rotateMotor22:
 	MOVLW      128
 	SUBWF      R0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__rotateMotor105
+	GOTO       L__rotateMotor104
 	MOVLW      0
 	SUBWF      rotateMotor_duty_cycle2_L0+0, 0
-L__rotateMotor105:
+L__rotateMotor104:
 	BTFSS      STATUS+0, 0
 	GOTO       L_rotateMotor23
 	MOVLW      2
@@ -724,11 +724,12 @@ _interrupt:
 L_interrupt25:
 	BTFSS      CCP3IF_bit+0, BitPos(CCP3IF_bit+0)
 	GOTO       L_interrupt28
-	BTFSS      CCP3CON+0, 0
+	BTFSS      CCP3M0_bit+0, BitPos(CCP3M0_bit+0)
 	GOTO       L_interrupt28
-L__interrupt75:
-	BCF        CCP3IF_bit+0, BitPos(CCP3IF_bit+0)
+L__interrupt74:
 	BCF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
+	BCF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
+	BCF        TMR1ON_bit+0, BitPos(TMR1ON_bit+0)
 	MOVLW      4
 	MOVWF      CCP3CON+0
 	CALL       _micros+0
@@ -740,13 +741,17 @@ L__interrupt75:
 	MOVWF      _t1_sig1+2
 	MOVF       R3, 0
 	MOVWF      _t1_sig1+3
+	BCF        CCP3IF_bit+0, BitPos(CCP3IF_bit+0)
+	BSF        TMR1ON_bit+0, BitPos(TMR1ON_bit+0)
 	BSF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
+	BSF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
 	GOTO       L_interrupt29
 L_interrupt28:
 	BTFSS      CCP3IF_bit+0, BitPos(CCP3IF_bit+0)
 	GOTO       L_interrupt30
-	BCF        CCP3IF_bit+0, BitPos(CCP3IF_bit+0)
 	BCF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
+	BCF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
+	BCF        TMR1ON_bit+0, BitPos(TMR1ON_bit+0)
 	MOVLW      5
 	MOVWF      CCP3CON+0
 	CALL       _micros+0
@@ -766,7 +771,6 @@ L_interrupt28:
 	SUBWFB     _t2_sig1+2, 1
 	MOVF       _t1_sig1+3, 0
 	SUBWFB     _t2_sig1+3, 1
-	BSF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
 	CALL       _micros+0
 	MOVF       R0, 0
 	MOVWF      _last_measure1+0
@@ -776,15 +780,20 @@ L_interrupt28:
 	MOVWF      _last_measure1+2
 	MOVF       R3, 0
 	MOVWF      _last_measure1+3
+	BSF        TMR1ON_bit+0, BitPos(TMR1ON_bit+0)
+	BCF        CCP3IF_bit+0, BitPos(CCP3IF_bit+0)
+	BSF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
+	BSF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
 L_interrupt30:
 L_interrupt29:
 	BTFSS      CCP4IF_bit+0, BitPos(CCP4IF_bit+0)
 	GOTO       L_interrupt33
-	BTFSS      CCP4CON+0, 0
+	BTFSS      CCP4M0_bit+0, BitPos(CCP4M0_bit+0)
 	GOTO       L_interrupt33
-L__interrupt74:
-	BCF        CCP4IF_bit+0, BitPos(CCP4IF_bit+0)
+L__interrupt73:
+	BCF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
 	BCF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
+	BCF        TMR1ON_bit+0, BitPos(TMR1ON_bit+0)
 	MOVLW      4
 	MOVWF      CCP4CON+0
 	CALL       _micros+0
@@ -796,13 +805,17 @@ L__interrupt74:
 	MOVWF      _t1_sig2+2
 	MOVF       R3, 0
 	MOVWF      _t1_sig2+3
+	BCF        CCP4IF_bit+0, BitPos(CCP4IF_bit+0)
+	BSF        TMR1ON_bit+0, BitPos(TMR1ON_bit+0)
+	BSF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
 	BSF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
 	GOTO       L_interrupt34
 L_interrupt33:
 	BTFSS      CCP4IF_bit+0, BitPos(CCP4IF_bit+0)
 	GOTO       L_interrupt35
-	BCF        CCP4IF_bit+0, BitPos(CCP4IF_bit+0)
+	BCF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
 	BCF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
+	BCF        TMR1ON_bit+0, BitPos(TMR1ON_bit+0)
 	MOVLW      5
 	MOVWF      CCP4CON+0
 	CALL       _micros+0
@@ -822,7 +835,6 @@ L_interrupt33:
 	SUBWFB     _t2_sig2+2, 1
 	MOVF       _t1_sig2+3, 0
 	SUBWFB     _t2_sig2+3, 1
-	BSF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
 	CALL       _micros+0
 	MOVF       R0, 0
 	MOVWF      _last_measure2+0
@@ -832,10 +844,14 @@ L_interrupt33:
 	MOVWF      _last_measure2+2
 	MOVF       R3, 0
 	MOVWF      _last_measure2+3
+	BSF        TMR1ON_bit+0, BitPos(TMR1ON_bit+0)
+	BCF        CCP4IF_bit+0, BitPos(CCP4IF_bit+0)
+	BSF        CCP3IE_bit+0, BitPos(CCP3IE_bit+0)
+	BSF        CCP4IE_bit+0, BitPos(CCP4IE_bit+0)
 L_interrupt35:
 L_interrupt34:
 L_end_interrupt:
-L__interrupt107:
+L__interrupt106:
 	RETFIE     %s
 ; end of _interrupt
 
@@ -859,10 +875,10 @@ L_error_led_blink36:
 	MOVF       FARG_error_led_blink_time_ms+1, 0
 	SUBWF      error_led_blink_i_L0+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__error_led_blink109
+	GOTO       L__error_led_blink108
 	MOVF       FARG_error_led_blink_time_ms+0, 0
 	SUBWF      error_led_blink_i_L0+0, 0
-L__error_led_blink109:
+L__error_led_blink108:
 	BTFSC      STATUS+0, 0
 	GOTO       L_error_led_blink37
 	BSF        RA0_bit+0, BitPos(RA0_bit+0)
@@ -922,10 +938,10 @@ L_calib_led_blink41:
 	MOVF       FARG_calib_led_blink_time_ms+1, 0
 	SUBWF      calib_led_blink_i_L0+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calib_led_blink111
+	GOTO       L__calib_led_blink110
 	MOVF       FARG_calib_led_blink_time_ms+0, 0
 	SUBWF      calib_led_blink_i_L0+0, 0
-L__calib_led_blink111:
+L__calib_led_blink110:
 	BTFSC      STATUS+0, 0
 	GOTO       L_calib_led_blink42
 	BSF        RA1_bit+0, BitPos(RA1_bit+0)
@@ -1083,18 +1099,18 @@ L_calibration46:
 	MOVLW      0
 	SUBWF      R7, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration114
+	GOTO       L__calibration113
 	MOVLW      30
 	SUBWF      R6, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration114
+	GOTO       L__calibration113
 	MOVLW      132
 	SUBWF      R5, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration114
+	GOTO       L__calibration113
 	MOVLW      128
 	SUBWF      R4, 0
-L__calibration114:
+L__calibration113:
 	BTFSC      STATUS+0, 0
 	GOTO       L_calibration47
 	MOVF       _t2_sig1+0, 0
@@ -1104,10 +1120,10 @@ L__calibration114:
 	MOVF       calibration_signal1_L_value_L0+1, 0
 	SUBWF      _t2_sig1+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration115
+	GOTO       L__calibration114
 	MOVF       calibration_signal1_L_value_L0+0, 0
 	SUBWF      _t2_sig1+0, 0
-L__calibration115:
+L__calibration114:
 	BTFSC      STATUS+0, 0
 	GOTO       L_calibration48
 	MOVF       calibration_signal_T_value_L0+0, 0
@@ -1122,10 +1138,10 @@ L_calibration48:
 	MOVF       calibration_signal2_L_value_L0+1, 0
 	SUBWF      _t2_sig2+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration116
+	GOTO       L__calibration115
 	MOVF       calibration_signal2_L_value_L0+0, 0
 	SUBWF      _t2_sig2+0, 0
-L__calibration116:
+L__calibration115:
 	BTFSC      STATUS+0, 0
 	GOTO       L_calibration49
 	MOVF       calibration_signal_T_value_L0+0, 0
@@ -1252,18 +1268,18 @@ L_calibration54:
 	MOVLW      0
 	SUBWF      R7, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration117
+	GOTO       L__calibration116
 	MOVLW      30
 	SUBWF      R6, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration117
+	GOTO       L__calibration116
 	MOVLW      132
 	SUBWF      R5, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration117
+	GOTO       L__calibration116
 	MOVLW      128
 	SUBWF      R4, 0
-L__calibration117:
+L__calibration116:
 	BTFSC      STATUS+0, 0
 	GOTO       L_calibration55
 	MOVF       _t2_sig1+0, 0
@@ -1273,10 +1289,10 @@ L__calibration117:
 	MOVF       _t2_sig1+1, 0
 	SUBWF      calibration_signal1_H_value_L0+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration118
+	GOTO       L__calibration117
 	MOVF       _t2_sig1+0, 0
 	SUBWF      calibration_signal1_H_value_L0+0, 0
-L__calibration118:
+L__calibration117:
 	BTFSC      STATUS+0, 0
 	GOTO       L_calibration56
 	MOVF       calibration_signal_T_value_L0+0, 0
@@ -1291,10 +1307,10 @@ L_calibration56:
 	MOVF       _t2_sig2+1, 0
 	SUBWF      calibration_signal2_H_value_L0+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__calibration119
+	GOTO       L__calibration118
 	MOVF       _t2_sig2+0, 0
 	SUBWF      calibration_signal2_H_value_L0+0, 0
-L__calibration119:
+L__calibration118:
 	BTFSC      STATUS+0, 0
 	GOTO       L_calibration57
 	MOVF       calibration_signal_T_value_L0+0, 0
@@ -1553,19 +1569,6 @@ L_main69:
 	GOTO       L_main69
 L_main70:
 	CALL       _rotateMotor+0
-	MOVLW      3
-	MOVWF      R11
-	MOVLW      8
-	MOVWF      R12
-	MOVLW      119
-	MOVWF      R13
-L_main71:
-	DECFSZ     R13, 1
-	GOTO       L_main71
-	DECFSZ     R12, 1
-	GOTO       L_main71
-	DECFSZ     R11, 1
-	GOTO       L_main71
 	GOTO       L_main67
 L_end_main:
 	GOTO       $+0

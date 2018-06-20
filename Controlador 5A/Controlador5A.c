@@ -19,7 +19,7 @@
  #define MAX_PWM           255
  #define MIN_PWM           -255
  #define CENTER_PWM        (MAX_PWM+MIN_PWM)/2
- #define DEADZONE          10
+ #define DEADZONE          50
  
  // PWMS
 
@@ -287,41 +287,57 @@ void interrupt()
     n_interrupts_timer1++;   //incrementa a flag do overflow do timer1
   }
   
-   if(CCP3IF_bit && CCP3CON.B0)            //Interrupcao do modulo CCP3 e modo de captura configurado para borda de subida?
+   if(CCP3IF_bit && CCP3M0_bit)            //Interrupcao do modulo CCP3 e modo de captura configurado para borda de subida?
   {                                        //Sim...
-    CCP3IF_bit  = 0x00;                    //Limpa a flag para nova captura
-    CCP3IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP
+    CCP3IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP3
+    CCP4IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP4
+    TMR1ON_bit = 0x00;                     //Pausa o TIMER1
     CCP3CON     = 0x04;                    //Configura captura por borda de descida
     t1_sig1     = micros();                //Guarda o valor do timer1 da primeira captura.
-    CCP3IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP
+    CCP3IF_bit  = 0x00;                    //Limpa a flag para nova captura
+    TMR1ON_bit = 0x01;                     //Retoma a contagem no TIMER1
+    CCP3IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP3
+    CCP4IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP4
   } //end if
    else if(CCP3IF_bit)                     //Interrupcao do modulo CCP3?
   {                                        //Sim...
-    CCP3IF_bit  = 0x00;                    //Limpa a flag para nova captura
-    CCP3IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP
+    CCP3IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP3
+    CCP4IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP4
+    TMR1ON_bit = 0x00;                     //Pausa o TIMER1
     CCP3CON     = 0x05;                    //Configura captura por borda de subida
     t2_sig1     = micros() - t1_sig1;      //Guarda o valor do timer1 da segunda captura.
-    CCP3IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP
-    last_measure1 = micros();               //guarda o tempo da ultima medida para o controle fail safe
+    last_measure1 = micros();              //guarda o tempo da ultima medida para o controle fail safe
+    TMR1ON_bit = 0x01;                     //Retoma a contagem no TIMER1
+    CCP3IF_bit  = 0x00;                    //Limpa a flag para nova captura
+    CCP3IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP3
+    CCP4IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP4
   } //end else
 
-   if(CCP4IF_bit && CCP4CON.B0)            //Interrupcao do modulo CCP4 e modo de captura configurado para borda de subida?
+   if(CCP4IF_bit && CCP4M0_bit)            //Interrupcao do modulo CCP3 e modo de captura configurado para borda de subida?
   {                                        //Sim...
-    CCP4IF_bit  = 0x00;                    //Limpa a flag para nova captura
-    CCP4IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP
+    CCP3IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP3
+    CCP4IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP4
+    TMR1ON_bit = 0x00;                     //Pausa o TIMER1
     CCP4CON     = 0x04;                    //Configura captura por borda de descida
     t1_sig2     = micros();                //Guarda o valor do timer1 da primeira captura.
-    CCP4IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP
-  } //end if
-   else if(CCP4IF_bit)                     //Interrupcao do modulo CCP4?
-  {                                        //Sim...
     CCP4IF_bit  = 0x00;                    //Limpa a flag para nova captura
-    CCP4IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP
+    TMR1ON_bit = 0x01;                     //Retoma a contagem no TIMER1
+    CCP3IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP3
+    CCP4IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP4
+  } //end if
+   else if(CCP4IF_bit)                     //Interrupcao do modulo CCP3?
+  {                                        //Sim...
+    CCP3IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP3
+    CCP4IE_bit  = 0x00;                    //Desabilita interrupcao do periferico CCP4
+    TMR1ON_bit = 0x00;                     //Pausa o TIMER1
     CCP4CON     = 0x05;                    //Configura captura por borda de subida
     t2_sig2     = micros() - t1_sig2;      //Guarda o valor do timer1 da segunda captura.
-    CCP4IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP
-    last_measure2 = micros();               //guarda o tempo da ultima medida para o controle fail safe
-  } //end else
+    last_measure2 = micros();              //guarda o tempo da ultima medida para o controle fail safe
+    TMR1ON_bit = 0x01;                     //Retoma a contagem no TIMER1
+    CCP4IF_bit  = 0x00;                    //Limpa a flag para nova captura
+    CCP3IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP3
+    CCP4IE_bit  = 0x01;                    //Habilita interrupcao do periferico CCP4
+  } //end else                                //Sim...
 } //end interrupt
 
 void error_led_blink(unsigned time_ms){
@@ -490,7 +506,7 @@ void main() {
        set_duty_cycle(1, 0);
        set_duty_cycle(2, 0);
     }
+    //print_signal_received();
     rotateMotor();
-    delay_ms(200);    //atraso como uma solução paleativa para os espasmos
     }
 }
